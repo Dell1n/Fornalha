@@ -185,12 +185,13 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
     <div>
       <div class="eyebrow">Protótipo 3D · Minecraft Bedrock</div>
       <h1>Fornalha Industrial</h1>
-      <p class="lede">Coloque packs no baú de entrada e veja um carrinho-funil distribuir 1 item por fornalha a cada passada, o carvão chegar pelo trilho de trás e o comparador decidir quantos módulos de 8 fornalhas ligar.</p>
+      <p class="lede">Coloque packs no baú de entrada e veja carrinhos-funil tirarem os itens, distribuírem 1 item por fornalha a cada passada e o sistema decidir quantos módulos ligar. Compare o extrator 8× com o carrinho por fileira.</p>
     </div>
     <div class="facts" aria-label="Números do jogo usados">
       <span class="fact">fornalha <b>10 s</b>/item</span>
       <span class="fact">carvão <b>8</b> itens</span>
       <span class="fact">funil <b>2,5</b> itens/s</span>
+      <span class="fact">carrinho-funil <b>10</b> itens/s</span>
       <span class="fact">carrinho <b>8</b> blocos/s</span>
     </div>
   </header>
@@ -212,6 +213,13 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
 
     <aside class="panel" aria-label="Controles">
       <div class="group">
+        <div class="eyebrow">Arquitetura</div>
+        <div class="seg" role="radiogroup" aria-label="Arquitetura">
+          <input type="radio" name="arch" id="ar-x8" value="x8" checked><label for="ar-x8">Extrator 8×</label>
+          <input type="radio" name="arch" id="ar-row" value="row"><label for="ar-row">Carrinho por fileira</label>
+        </div>
+      </div>
+      <div class="group">
         <div class="eyebrow">Formato</div>
         <div class="seg" role="radiogroup" aria-label="Formato">
           <input type="radio" name="layout" id="lay-top" value="top" checked><label for="lay-top">Baú em cima</label>
@@ -221,12 +229,12 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
       </div>
       <div class="group">
         <div class="eyebrow">Estrutura</div>
-        <div class="row"><span class="lbl">Carrinhos</span>
+        <div class="row" id="rowTracks"><span class="lbl">Carrinhos</span>
           <div class="seg"><input type="radio" name="tracks" id="tr-1" value="1" checked><label for="tr-1">1 fileira</label><input type="radio" name="tracks" id="tr-2" value="2"><label for="tr-2">2 fileiras</label></div></div>
-        <div class="row"><span class="lbl">Módulos de 8</span>
-          <div class="seg"><input type="radio" name="mods" id="md-1" value="1"><label for="md-1">1</label><input type="radio" name="mods" id="md-2" value="2"><label for="md-2">2</label><input type="radio" name="mods" id="md-3" value="3"><label for="md-3">3</label><input type="radio" name="mods" id="md-4" value="4" checked><label for="md-4">4</label></div></div>
-        <div class="row"><span class="lbl">Vias de carga</span>
-          <div class="seg"><input type="radio" name="lanes" id="ln-1" value="1"><label for="ln-1">1 por carrinho</label><input type="radio" name="lanes" id="ln-2" value="2" checked><label for="ln-2">2 por carrinho</label></div></div>
+        <div class="row"><span class="lbl" id="modsLbl">Módulos de 8</span>
+          <div class="seg"><input type="radio" name="mods" id="md-1" value="1" checked><label for="md-1">1</label><input type="radio" name="mods" id="md-2" value="2"><label for="md-2">2</label><input type="radio" name="mods" id="md-3" value="3"><label for="md-3">3</label><input type="radio" name="mods" id="md-4" value="4"><label for="md-4">4</label></div></div>
+        <div class="row" id="rowLanes"><span class="lbl">Vias de carga</span>
+          <div class="seg"><input type="radio" name="lanes" id="ln-1" value="1" checked><label for="ln-1">1 por carrinho</label><input type="radio" name="lanes" id="ln-2" value="2"><label for="ln-2">2 por carrinho</label></div></div>
         <div class="row"><span class="lbl">Seleção</span>
           <div class="seg"><input type="radio" name="mode" id="mo-auto" value="auto" checked><label for="mo-auto">Automática</label><input type="radio" name="mode" id="mo-fixed" value="fixed"><label for="mo-fixed">Todas ligadas</label></div></div>
         <div class="row"><span class="lbl">Bloco</span>
@@ -261,8 +269,8 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
           <summary>Parâmetros para calibrar no seu mundo</summary>
           <div style="display:grid;gap:8px;margin-top:8px">
             <div class="row"><label for="cartSpeed">Carrinho (blocos/s)</label><input type="number" id="cartSpeed" min="2" max="12" step="1" value="8"></div>
-            <div class="row"><label for="pullCd">Carrinho-funil puxa a cada (ticks)</label><input type="number" id="pullCd" min="1" max="16" step="1" value="8"></div>
-            <p class="note">8 ticks = 2,5 itens/s, igual a um funil. Para medir no jogo: 64 itens no baú, cronometre até o carrinho-funil esvaziá-lo e use 64 ÷ segundos.</p>
+            <div class="row"><label for="pullCd">Carrinho-funil puxa a cada (ticks)</label><input type="number" id="pullCd" min="1" max="16" step="1" value="2"></div>
+            <p class="note">2 ticks = 10 itens/s, o valor do Bedrock segundo a Minecraft Wiki (no Java são 20). 8 ticks = 2,5 itens/s, igual a um funil. Para medir: 64 itens no baú, cronometre até o carrinho-funil esvaziá-lo e use 64 ÷ segundos.</p>
           </div>
         </details>
       </div>
@@ -280,10 +288,42 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
       </div>
     </section>
 
-    <section class="sec" aria-labelledby="h-how">
-      <div><div class="eyebrow">Funcionamento</div><h2 id="h-how">O caminho de um pack</h2></div>
+    <section class="sec" aria-labelledby="h-x8">
+      <div><div class="eyebrow">Sua ideia</div><h2 id="h-x8">Extrator 8×: 2 baús, 8 funis, 4 módulos</h2></div>
       <div class="steps">
-        <div class="step"><h3>Entrada</h3><p>Você coloca os packs no baú duplo. Uma metade fica bem em cima do carrinho-funil estacionado; a outra fica em cima de um funil que aponta para o carrinho. São as duas vias de carga.</p></div>
+        <div class="step"><h3>Baús</h3><p>Cada baú de entrada fica em cima de um carrinho-funil parado. No Bedrock o carrinho-funil puxa 1 item a cada 2 ticks: 10 itens/s, 4 vezes um funil. Dois carrinhos tiram 20 itens/s.</p></div>
+        <div class="step"><h3>Quina de 4 funis</h3><p>O carrinho fica fora do trilho, em cima da quina entre 4 funis, e os 4 puxam dele ao mesmo tempo: 4 × 2,5 = 10 itens/s, o mesmo que ele tira do baú.</p></div>
+        <div class="step"><h3>4 correntes</h3><p>Cada par de funis desce por conectores até a estação de um módulo, um entrando por cima e outro por trás. São 4 correntes de 5 itens/s, uma por módulo.</p></div>
+        <div class="step"><h3>Distribuidor</h3><p>Cada módulo tem o próprio carrinho-funil vai-e-vem. Ele sai quando não vem mais nada pela corrente ou quando enche, igual à fileira.</p></div>
+        <div class="step"><h3>Seleção</h3><p>Um comparador em cada baú (27 espaços) lê a força: 1 pack dá força 1 e liga o 1º módulo daquele lado; 2 ou 3 packs dão força 2 e ligam os dois. Uma trava segura até o lado inteiro esvaziar.</p></div>
+        <div class="step"><h3>Travar</h3><p>Desligar um módulo é travar só os 2 funis da quina dele. Os outros 2 continuam puxando e recebem tudo. Nada de linha de redstone ao longo da fileira.</p></div>
+      </div>
+      <div class="two">
+        <div class="prose">
+          <h3>O que a simulação mostra</h3>
+          <ul>
+            <li>Por baú, as duas arquiteturas puxam os mesmos 10 itens/s. O extrator divide isso em 2 módulos de 5 itens/s; o carrinho por fileira usa os 10 itens/s num módulo só (o distribuidor já é o carrinho-funil embaixo do baú). Com o mesmo número de fornalhas e de baús, as curvas ficam próximas; o extrator fica um pouco abaixo com fila grande porque cada distribuidor enche a 5 itens/s em vez de 10.</li>
+            <li>A vantagem do extrator é de controle: módulos independentes, curtos, e travar 2 funis em vez de 16.</li>
+            <li>A divisão entre os 2 módulos de um lado não é exata. Quando o carrinho extrator está quase vazio, quem atualiza primeiro pega mais. 1 pack num lado só ficou <b id="x8Split">—</b> itens entre os dois módulos, mesmo com a ordem dos funis alternando a cada tick.</li>
+            <li>Com a seleção automática, 1 pack num baú liga 1 módulo; 2 packs no mesmo baú ligam 2. Para 1 carvão por fornalha, use módulos de 8 e coloque no máximo 2 packs por baú de cada vez.</li>
+          </ul>
+        </div>
+        <div class="prose">
+          <h3>Para testar no criativo antes</h3>
+          <ul>
+            <li><b>4 funis no mesmo carrinho.</b> É o ponto que segura tudo. Não achei confirmação de que no Bedrock 4 funis puxam de um carrinho parado na quina. Se só o funil de baixo puxar, cada carrinho cai para 2,5 itens/s e o extrator perde o sentido.</li>
+            <li><b>Qual baú o carrinho na quina enxerga.</b> No Java ele lê o bloco do canto +x +z da quina. Por isso, no modelo, cada baú fica sobre um quadrante e os dois baús ficam separados por 4 blocos.</li>
+            <li><b>Baú duplo.</b> As duas metades são vizinhas, então os quadrados de 4 funis dos dois carrinhos se sobrepõem numa coluna: ficam 6 funis (15 itens/s) em vez de 8. Dois baús simples separados dão os 8.</li>
+            <li><b>Carvão.</b> No modelo há um barril em cima da estação do carvão de cada módulo; o carrinho-funil puxa direto dele. O barril do módulo 1 esvazia primeiro, porque ele liga em toda onda.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="h-how">
+      <div><div class="eyebrow">Carrinho por fileira</div><h2 id="h-how">O caminho de um pack numa fileira</h2></div>
+      <div class="steps">
+        <div class="step"><h3>Entrada</h3><p>Você coloca os packs no baú bem em cima do carrinho-funil estacionado, que puxa 10 itens/s. Dá para pôr uma 2ª via (funil por trás, 2,5 itens/s), mas o carrinho espera ela esvaziar antes de sair: com os packs divididos, ela mais atrasa do que ajuda.</p></div>
         <div class="step"><h3>Carga</h3><p>O carrinho fica parado num trilho elétrico desligado. Quando o baú esvazia (comparador do baú vai a 0) ou o carrinho enche (força 15), a estação liga e solta o carrinho.</p></div>
         <div class="step"><h3>Medição</h3><p>Logo após a estação, o carrinho passa num trilho detector. O comparador lê quantos packs ele leva e grava quantos módulos ligar até a próxima partida.</p></div>
         <div class="step"><h3>Distribuição</h3><p>O carrinho vai e volta por cima dos funis. Cada funil destravado puxa 1 item por passada, então cada fornalha ativa recebe a mesma quantidade, uma de cada vez.</p></div>
@@ -293,7 +333,7 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
     </section>
 
     <section class="sec" aria-labelledby="h-sel">
-      <div><div class="eyebrow">Redstone</div><h2 id="h-sel">Como o sistema escolhe quantas fornalhas ligar</h2></div>
+      <div><div class="eyebrow">Redstone · carrinho por fileira</div><h2 id="h-sel">Como a fileira escolhe quantas fornalhas ligar</h2></div>
       <div class="two">
         <div class="prose">
           <p>O carrinho distribuidor é um <b>carrinho com funil</b> e não um carrinho com baú por um motivo: ele tem 5 espaços, então o comparador sobe exatamente 3 pontos de força por pack. Com um carrinho com baú (27 espaços), 2 e 3 packs dão a mesma força e o sistema não consegue diferenciar.</p>
@@ -322,11 +362,12 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
           <p>Fornalha só gasta combustível quando tem algo para queimar. O carvão que sobra no espaço de combustível fica esperando a próxima onda. O desperdício aparece quando uma fornalha acende um carvão (8 itens) e recebe menos de 8 itens antes de esfriar.</p>
           <p>Com a seleção automática cada fornalha recebe 8 itens por pack, e cada pack de carvão no barril vira 8 ondas para um módulo. Com todas ligadas, 1 pack em 32 fornalhas dá 2 itens para cada uma e queima 32 carvões, 4 vezes o necessário.</p>
           <p>O barril, e não um baú, guarda o carvão porque fica colado no baú de entrada e um baú ali viraria baú duplo com ele.</p>
+          <p>No extrator 8× a conta é a mesma: com módulos de 8 fornalhas, cada pack num baú liga um módulo e dá 8 itens por fornalha. Com todos ligados, 1 pack se espalha por 16 a 32 fornalhas e gasta 2 a 4 vezes mais carvão.</p>
         </div>
         <div class="tablewrap">
           <table>
-            <thead><tr><th>Com 32 fornalhas</th><th>Automático</th><th></th><th>Todas ligadas</th><th></th></tr>
-              <tr><th>Packs</th><th>tempo</th><th>carvão</th><th>tempo</th><th>carvão</th></tr></thead>
+            <thead><tr><th>32 fornalhas</th><th colspan="2">Fileira, automático</th><th colspan="2">8×, automático</th><th colspan="2">8×, todos ligados</th></tr>
+              <tr><th>Packs</th><th>tempo</th><th>carvão</th><th>tempo</th><th>carvão</th><th>tempo</th><th>carvão</th></tr></thead>
             <tbody id="fuelTable"></tbody>
           </table>
           <p class="note" style="margin-top:8px">Outros combustíveis (itens por unidade): bloco de carvão 80 · balde de lava 100 · bloco de alga seca 20 · vara de blaze 12 · tábua 1,5 · graveto 0,5. Com 64 fornalhas e 1 item em cada, 2 gravetos por fornalha não desperdiçam nada.</p>
@@ -344,6 +385,7 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
         <div class="lay" data-lay="under"><h3>Subterrâneo</h3>
           <ul><li class="pro">Baús e barril no nível do chão: abre e joga.</li><li class="pro">Corredor na frente das fornalhas dá acesso à saída.</li><li class="con">A saída fica 5 blocos abaixo; precisa de escada ou elevador de liberadores.</li><li class="con">Mais escavação.</li></ul></div>
       </div>
+      <p class="note" style="max-width:80ch">No extrator 8× os baús ficam no topo da torre do extrator (y7). No subterrâneo eles ficam no nível do chão; nos outros dois formatos há uma escada de blocos até eles. Os barris de carvão do 8× ficam no meio das fileiras, então deixe um acesso até eles.</p>
     </section>
 
     <section class="sec" aria-labelledby="h-test">
@@ -351,7 +393,8 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
       <ol class="checklist" id="checklist">
         <li><b>Folga nas pontas do trilho.</b> Deixe 4 trilhos sem funil antes do primeiro e depois do último. <span id="ckGap"></span></li>
         <li><b>Shift-click no baú duplo.</b> Os packs entram na primeira metade, então só uma via trabalha. Escolha “Shift-click num baú só” no painel para ver o efeito. Espalhe os packs entre as metades quando colocar mais de um.</li>
-        <li><b>Velocidade do carrinho-funil.</b> Varia entre versões. Meça com 64 itens e ajuste em “Parâmetros para calibrar”.</li>
+        <li><b>Velocidade do carrinho-funil.</b> A Minecraft Wiki dá 10 itens/s no Bedrock (20 no Java). Confirme com 64 itens no baú e um cronômetro; o valor fica em “Parâmetros para calibrar”.</li>
+        <li><b>4 funis puxando do mesmo carrinho na quina</b> (só no extrator 8×). Empurre um carrinho-funil para fora do trilho, deixe-o na quina de 4 funis e veja se os 4 recebem itens.</li>
         <li><b>Estação segurando o carrinho.</b> Confirme que o trilho elétrico desligado para o carrinho em cima da estação e que, ao ligar, ele sai empurrado pelo funil/bloco de trás.</li>
         <li><b>Comparador lendo o carrinho no trilho detector.</b> Teste com 1, 2, 3 e 4 packs e confira as forças 3, 6, 9 e 12.</li>
         <li><b>Distância de simulação.</b> No Bedrock, nada roda fora da distância de simulação. Fique perto (ou use uma área de ticking) enquanto as ondas queimam.</li>
@@ -370,29 +413,36 @@ kbd { font-family: var(--font-mono); font-size: .8em; border: 1px solid var(--li
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 /* ===================== Motor de simulação (tick a tick, 20 ticks/s) ===================== */
+/* Arquitetura 'row': 1 carrinho distribuidor por fileira, módulos travados por linhas de redstone.
+   Arquitetura 'x8' : 2 baús → 2 carrinhos-funil extratores (na quina de 4 funis) → 8 funis →
+                      4 correntes de 2 funis → 4 carrinhos distribuidores, 1 por módulo. */
 const Sim = (() => {
-  const TPS = 20, HCD = 8, HCAP = 320, CARTCAP = 320, FCAP = 64;
-  // trilho: estação x=0, detector x=1, folga até X0, funis X0..X0+n-1, RUN trilhos de folga, para-choque
-  const X0 = 5, RUN = 4;
+  const TPS = 20, HCD = 8, HCAP = 320, CARTCAP = 320, FCAP = 64, CHEST = 27 * 64;
 
   function create(cfg) {
     const cook = cfg.kind === 'blast' ? 100 : 200;
+    const B = cfg.arch === 'x8', auto = cfg.mode === 'auto';
+    // folga de 4 trilhos antes e depois dos funis (noGap: sem folga, só para comparação)
+    const X0 = cfg.noGap ? 2 : 5, RUN = cfg.noGap ? 0 : 4;
     const S = {
-      cfg, t: 0, cook, burn: cook * 8, speed: (cfg.cartSpeed || 8) / TPS,
-      pullCd: cfg.pullCd || 8, tracks: [], ev: null,
+      cfg, B, auto, X0, RUN, t: 0, cook, burn: cook * 8, speed: (cfg.cartSpeed || 8) / TPS,
+      pullCd: cfg.pullCd || 2, tracks: [], sides: [], ev: null,
       st: { added: 0, collected: 0, smelted: 0, coal: 0, waste: 0, batchStart: 0, batchEnd: -1 },
     };
-    for (let ti = 0; ti < cfg.tracks; ti++) {
+    const nTracks = B ? 4 : cfg.tracks;
+    for (let ti = 0; ti < nTracks; ti++) {
       const n = cfg.mods * 8;
       const tr = {
-        id: ti, n, xEnd: X0 + n - 1 + RUN, lanes: [],
+        id: ti, n, xEnd: X0 + n - 1 + RUN, lanes: [], side: ti >> 1,
         cart: { x: 0, v: 0, parked: true, items: 0, cd: 0 },
         fcart: { x: 0, v: 0, parked: true, items: 0, cd: 0 },
-        fuelLane: { chest: 0, n: 0, cd: 0 },
-        active: cfg.mode === 'auto' ? 0 : cfg.mods,
+        // no 8× o barril fica logo acima da estação do carvão e o carrinho-funil puxa direto dele
+        fuelLane: { chest: 0, n: 0, cd: 0, pull: B },
+        active: B || !auto ? cfg.mods : 0, fed: !auto,
         f: [], hin: [], hfu: [], hout: [], sinks: [], lastWave: null,
       };
-      for (let l = 0; l < cfg.lanes; l++) tr.lanes.push({ chest: 0, n: 0, cd: 0, pull: l === 0 && cfg.layout !== 'box' });
+      const nl = B ? 2 : cfg.lanes;
+      for (let l = 0; l < nl; l++) tr.lanes.push({ chest: 0, n: 0, cd: 0, pull: !B && l === 0 && cfg.layout !== 'box' });
       for (let i = 0; i < n; i++) {
         tr.f.push({ in: 0, fuel: 0, out: 0, burn: 0, cook: 0 });
         tr.hin.push({ n: 0, cd: 0 });
@@ -404,6 +454,13 @@ const Sim = (() => {
       }
       S.tracks.push(tr);
     }
+    if (B) for (let s = 0; s < 2; s++) {
+      S.sides.push({
+        id: s, chest: 0, cart: { items: 0, cd: 0 }, on: auto ? 0 : 2, ss: 0,
+        // funis 0,1 alimentam o módulo 2s; funis 2,3 o módulo 2s+1
+        pads: [0, 1, 2, 3].map(p => ({ n: 0, cd: 0, t: 2 * s + (p >> 1), l: p & 1 })),
+      });
+    }
     return S;
   }
   const emit = (S, e) => { if (S.ev) S.ev.push(e); };
@@ -413,7 +470,8 @@ const Sim = (() => {
     if (S.st.collected >= S.st.added) { S.st.batchStart = S.t; S.st.batchEnd = -1; }
     S.st.added += items;
     const slots = [];
-    S.tracks.forEach(t => t.lanes.forEach(l => slots.push(l)));
+    if (S.B) S.sides.forEach(sd => slots.push(sd));
+    else S.tracks.forEach(t => t.lanes.forEach(l => slots.push(l)));
     if (spread === 'one') { slots[0].chest += items; return; }
     if (spread === 'split') {
       const per = Math.floor(items / slots.length);
@@ -426,28 +484,38 @@ const Sim = (() => {
   function addFuel(S, coal) { S.tracks.forEach(t => { t.fuelLane.chest += coal; }); }
   function prefuel(S, k) { S.tracks.forEach(t => t.f.forEach(f => { f.fuel = k; })); }
 
-  const sourcesEmpty = tr => tr.lanes.every(l => l.chest === 0 && l.n === 0);
-  const atStation = c => c.x < 0.5;
   const ss = items => items > 0 ? 1 + Math.floor(14 * items / CARTCAP) : 0;
+  const ssChest = items => items > 0 ? 1 + Math.floor(14 * items / CHEST) : 0;
+  const atStation = c => c.x < 0.5;
+  const padLocked = (sd, p) => (p >> 1) >= sd.on;
+
+  function sourcesEmpty(S, tr) {
+    if (!tr.lanes.every(l => l.chest === 0 && l.n === 0)) return false;
+    if (!S.B) return true;
+    const sd = S.sides[tr.side];
+    const mine = sd.pads.filter(p => p.t === tr.id);
+    if (mine.some(p => p.n > 0)) return false;
+    const locked = padLocked(sd, (tr.id & 1) * 2);
+    return locked || (sd.cart.items === 0 && sd.chest === 0);
+  }
 
   function depart(S, tr, c, isInput) {
     c.parked = false; c.v = S.speed;
     if (isInput) {
-      if (S.cfg.mode === 'auto') tr.active = Math.max(1, Math.min(S.cfg.mods, Math.floor(ss(c.items) / 3)));
+      if (!S.B && S.auto) tr.active = Math.max(1, Math.min(S.cfg.mods, Math.floor(ss(c.items) / 3)));
       tr.lastWave = { t: S.t, items: c.items, ss: ss(c.items), active: tr.active };
       emit(S, { k: 'depart', tr: tr.id });
     }
   }
 
   function stepCart(S, tr, c, isInput) {
-    const srcEmpty = isInput ? sourcesEmpty(tr) : (tr.fuelLane.chest === 0 && tr.fuelLane.n === 0);
+    const fl = tr.fuelLane;
+    const srcEmpty = isInput ? sourcesEmpty(S, tr) : (fl.chest === 0 && fl.n === 0);
     if (c.parked) {
-      if (isInput) {
-        const l0 = tr.lanes[0];
-        if (l0 && l0.pull) {
-          if (c.cd > 0) c.cd--;
-          else if (l0.chest > 0 && c.items < CARTCAP) { l0.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: 'lane', tr: tr.id, l: 0 }); }
-        }
+      const pullFrom = isInput ? (tr.lanes[0] && tr.lanes[0].pull ? tr.lanes[0] : null) : (fl.pull ? fl : null);
+      if (pullFrom) {
+        if (c.cd > 0) c.cd--;
+        else if (pullFrom.chest > 0 && c.items < CARTCAP) { pullFrom.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: isInput ? 'lane' : 'flane', tr: tr.id, l: 0 }); }
       }
       if ((srcEmpty && c.items > 0) || c.items >= CARTCAP) depart(S, tr, c, isInput);
       return;
@@ -461,8 +529,37 @@ const Sim = (() => {
     }
   }
 
+  // extrator 8×: trava (liga quando o baú enche, zera quando o lado inteiro esvazia)
+  function stepSide(S, sd) {
+    const tA = S.tracks[2 * sd.id], tB = S.tracks[2 * sd.id + 1];
+    if (S.auto) {
+      const s = ssChest(sd.chest), target = Math.min(2, s);
+      if (target > sd.on) { sd.on = target; sd.ss = s; }
+      const idle = sd.chest === 0 && sd.cart.items === 0 && sd.pads.every(p => p.n === 0) &&
+        [tA, tB].every(t => t.lanes.every(l => l.n === 0) && t.cart.parked && t.cart.items === 0);
+      if (idle && sd.on) sd.on = 0;
+    }
+    tA.fed = sd.on >= 1; tB.fed = sd.on >= 2;
+    const c = sd.cart;
+    if (c.cd > 0) c.cd--;
+    else if (sd.chest > 0 && c.items < CARTCAP) { sd.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: 'ext', s: sd.id }); }
+    // a ordem em que os funis atualizam muda a cada tick (média justa entre os 4)
+    for (let k = 0; k < 4; k++) {
+      const pi = (k + S.t) & 3, p = sd.pads[pi];
+      if (padLocked(sd, pi)) continue;
+      if (p.cd > 0) { p.cd--; continue; }
+      let mv = false;
+      const lane = S.tracks[p.t].lanes[p.l];
+      if (p.n > 0 && lane.n < HCAP) { const was = lane.n === 0; lane.n++; p.n--; mv = true; if (was && lane.cd === 0) lane.cd = HCD; emit(S, { k: 'pe', s: sd.id, p: pi }); }
+      if (p.n < HCAP && c.items > 0) { c.items--; p.n++; mv = true; emit(S, { k: 'pad', s: sd.id, p: pi }); }
+      if (mv) p.cd = HCD;
+    }
+  }
+
   function tick(S) {
     S.t++;
+    const X0 = S.X0;
+    if (S.B) S.sides.forEach(sd => stepSide(S, sd));
     for (const tr of S.tracks) {
       tr.lanes.forEach((l, li) => {
         if (l.pull) return;
@@ -473,12 +570,14 @@ const Sim = (() => {
         if (mv) l.cd = HCD;
       });
       const fl = tr.fuelLane;
-      if (fl.cd > 0) fl.cd--;
-      else {
-        let mv = false;
-        if (fl.n > 0 && atStation(tr.fcart) && tr.fcart.items < CARTCAP) { fl.n--; tr.fcart.items++; mv = true; emit(S, { k: 'flane', tr: tr.id }); }
-        if (fl.chest > 0 && fl.n < HCAP) { fl.chest--; fl.n++; mv = true; }
-        if (mv) fl.cd = HCD;
+      if (!fl.pull) {
+        if (fl.cd > 0) fl.cd--;
+        else {
+          let mv = false;
+          if (fl.n > 0 && atStation(tr.fcart) && tr.fcart.items < CARTCAP) { fl.n--; tr.fcart.items++; mv = true; emit(S, { k: 'flane', tr: tr.id }); }
+          if (fl.chest > 0 && fl.n < HCAP) { fl.chest--; fl.n++; mv = true; }
+          if (mv) fl.cd = HCD;
+        }
       }
       stepCart(S, tr, tr.cart, true);
       stepCart(S, tr, tr.fcart, false);
@@ -541,7 +640,7 @@ const Sim = (() => {
     while (S.st.collected < S.st.added && S.t < limit) tick(S);
     return { sec: S.t / TPS, coal: S.st.coal, waste: S.st.waste / S.burn };
   }
-  return { create, tick, addItems, addFuel, runBatch, ss, TPS, CARTCAP, X0, RUN };
+  return { create, tick, addItems, addFuel, runBatch, ss, ssChest, padLocked, TPS, CARTCAP, CHEST };
 })();
 
 /* ===================== Utilidades ===================== */
@@ -555,112 +654,147 @@ const radio = name => document.querySelector(`input[name="${name}"]:checked`).va
 const ui = {
   cfg() {
     return {
-      layout: radio('layout'), tracks: +radio('tracks'), mods: +radio('mods'), lanes: +radio('lanes'),
+      arch: radio('arch'), layout: radio('layout'), tracks: +radio('tracks'), mods: +radio('mods'), lanes: +radio('lanes'),
       mode: radio('mode'), kind: radio('kind'),
       cartSpeed: Math.min(12, Math.max(2, +$('cartSpeed').value || 8)),
-      pullCd: Math.min(16, Math.max(1, +$('pullCd').value || 8)),
+      pullCd: Math.min(16, Math.max(1, +$('pullCd').value || 2)),
     };
   },
 };
 
 /* ===================== Geometria do layout (blocos) ===================== */
 const LAYER_NAMES = {
-  0: 'y0 · funis de saída e baús de saída',
-  1: 'y1 · fornalhas, funis de carvão e travas do carvão',
-  2: 'y2 · funis de entrada, trilho do carvão e travas',
-  3: 'y3 · trilho dos itens, comparador e linha de trava',
-  4: 'y4 · baús de entrada e barril',
-  5: 'tudo',
+  row: ['y0 · funis de saída e baús de saída', 'y1 · fornalhas, funis de carvão e travas do carvão', 'y2 · funis de entrada, trilho do carvão e travas', 'y3 · trilho dos itens, comparador e linha de trava', 'y4 · baús de entrada e barril'],
+  x8: ['y0 · funis de saída e baús de saída', 'y1 · fornalhas e funis de carvão', 'y2 · funis de entrada e trilhos do carvão', 'y3 · trilhos dos itens e barris de carvão', 'y4 · funis que entram nas estações', 'y5 · os 8 funis do extrator e os conectores', 'y6 · carrinhos-funil extratores (na quina)', 'y7 · baús de entrada'],
 };
-function genLayout(cfg) {
+function layoutCtx() {
   const B = [], occ = new Map();
   const K = (x, y, z) => x + ',' + y + ',' + z;
   const put = (x, y, z, t, o = {}) => { const k = K(x, y, z); if (occ.has(k)) return null; const b = Object.assign({ x, y, z, t }, o); occ.set(k, b); B.push(b); return b; };
-  const n = cfg.mods * 8, X0 = Sim.X0, RUN = Sim.RUN, xEnd = X0 + n - 1 + RUN, xB = xEnd + 1;
-  const box = cfg.layout === 'box', under = cfg.layout === 'under';
-  const A = { lane: [], barrel: [], sinks: [], comp: [], mods: [], rowZ: [], fuelZ: [], lockZ: [] };
-  for (let t = 0; t < cfg.tracks; t++) {
-    const Z = zA => (t === 0 ? zA : 6 - zA);
-    const zr = Z(0), zl = Z(-1), zf = Z(1), zlf = Z(2);
-    A.rowZ[t] = zr; A.fuelZ[t] = zf; A.lockZ[t] = zl;
-    const face = t === 0 ? 'nz' : 'pz';
-    const toRow = t === 0 ? 'nz' : 'pz';
-    const toRowFromLock = t === 0 ? 'pz' : 'nz';
-    for (let i = 0; i < n; i++) {
-      const x = X0 + i, m = i >> 3;
-      put(x, 1, zr, 'furnace', { face, tr: t, i });
-      put(x, 2, zr, 'hopper', { dir: 'd', tr: t, i, role: 'hin', m });
-      put(x, 3, zr, 'rail');
-      const g = Math.floor(i / 16);
-      put(x, 0, zr, 'hopper', { dir: g % 2 === 0 ? 'nx' : 'px', tr: t, i, role: 'hout' });
-      put(x, 1, zf, 'hopper', { dir: toRow, tr: t, i, role: 'hfu', m });
-      put(x, 2, zf, 'rail');
-      put(x, 2, zl, 'stone'); put(x, 3, zl, 'dust', { tr: t, m, role: 'lockIn' });
-      put(x, 1, zlf, 'stone'); put(x, 2, zlf, 'dust', { tr: t, m, role: 'lockFu' });
-    }
-    for (let m = 0; m < cfg.mods; m++) A.mods.push({ t, m, x: X0 + m * 8 + 4, z: zl });
-    // estação, detector e folga inicial
-    put(0, 3, zr, 'prail', { station: 'in', tr: t }); put(0, 2, zr, 'stone'); put(0, 1, zr, 'stone');
-    put(1, 3, zr, 'drail'); put(1, 2, zr, 'stone'); put(1, 1, zr, 'stone');
-    put(1, 3, zl, 'comparator', { face }); A.comp[t] = [1, 3, zl];
-    for (let x = 2; x < X0; x++) { put(x, 3, zr, 'rail'); put(x, 2, zr, 'stone'); }
-    put(0, 2, zf, 'prail', { station: 'fu', tr: t }); put(0, 1, zf, 'stone');
-    for (let x = 1; x < X0; x++) { put(x, 2, zf, 'rail'); put(x, 1, zf, 'stone'); }
-    // folga final + para-choques de bloco de redstone (alimentam o último trilho elétrico)
-    for (let x = X0 + n; x <= xEnd; x++) {
-      const last = x === xEnd;
-      put(x, 3, zr, last ? 'prail' : 'rail', { on: true }); put(x, 2, zr, 'stone');
-      put(x, 2, zf, last ? 'prail' : 'rail', { on: true }); put(x, 1, zf, 'stone');
-    }
-    put(xB, 3, zr, 'rblock'); put(xB, 2, zf, 'rblock');
-    // vias de carga + carvão
-    if (!box) {
-      put(0, 4, zr, 'chest', { face, role: 'in' }); A.lane[t] = [[0, 4, zr]];
-      if (cfg.lanes > 1) { put(-1, 3, zr, 'hopper', { dir: 'px' }); put(-1, 4, zr, 'chest', { face, role: 'in' }); A.lane[t].push([-1, 4, zr]); }
-      else put(-1, 3, zr, 'stone');
-      put(0, 4, zf, 'barrel'); put(0, 3, zf, 'hopper', { dir: 'd' }); put(-1, 2, zf, 'stone');
-      A.barrel[t] = [0, 4, zf];
-    } else {
-      put(-3, 4, zr, 'chest', { face: 'nx', role: 'in' }); for (let x = -3; x <= -1; x++) put(x, 3, zr, 'hopper', { dir: 'px' });
-      A.lane[t] = [[-3, 4, zr]];
-      if (cfg.lanes > 1) {
-        put(-3, 4, zl, 'chest', { face: 'nx', role: 'in' }); for (let x = -3; x <= -1; x++) put(x, 3, zl, 'hopper', { dir: 'px' });
-        put(0, 3, zl, 'hopper', { dir: toRowFromLock }); A.lane[t].push([-3, 4, zl]);
-      }
-      put(-3, 3, zf, 'barrel'); for (let x = -3; x <= -1; x++) put(x, 2, zf, 'hopper', { dir: 'px' });
-      A.barrel[t] = [-3, 3, zf];
-    }
-    // saída
-    A.sinks[t] = [];
-    if (!box) { put(X0 - 1, 0, zr, 'chest', { face, role: 'out' }); put(X0 - 2, 0, zr, 'chest', { face, role: 'out' }); A.sinks[t][0] = [X0 - 1, 0, zr]; }
-    else { for (let x = X0 - 1; x >= -2; x--) put(x, 0, zr, 'hopper', { dir: 'nx' }); put(-3, 0, zr, 'chest', { face: 'nx', role: 'out' }); A.sinks[t][0] = [-3, 0, zr]; }
-    if (n > 16) {
-      if (!box) { put(X0 + n, 0, zr, 'chest', { face, role: 'out' }); A.sinks[t][1] = [X0 + n, 0, zr]; }
-      else { for (let x = X0 + n; x <= xB + 1; x++) put(x, 0, zr, 'hopper', { dir: 'px' }); put(xB + 2, 0, zr, 'chest', { face: 'px', role: 'out' }); A.sinks[t][1] = [xB + 2, 0, zr]; }
-    }
+  return { B, occ, K, put, air: new Set() };
+}
+// uma fileira de fornalhas com seu trilho de itens (y3) e de carvão (y2), estações em x=0
+function putRow(put, o) {
+  const { n, X0, RUN, zr, zf, face, fdir, t, locks, zl, zlf, box } = o;
+  const xEnd = X0 + n - 1 + RUN, xB = xEnd + 1;
+  for (let i = 0; i < n; i++) {
+    const x = X0 + i, m = i >> 3, g = Math.floor(i / 16);
+    put(x, 1, zr, 'furnace', { face, tr: t, i });
+    put(x, 2, zr, 'hopper', { dir: 'd', tr: t, i, role: 'hin', m });
+    put(x, 3, zr, 'rail');
+    put(x, 0, zr, 'hopper', { dir: g % 2 === 0 ? 'nx' : 'px', tr: t, i, role: 'hout' });
+    put(x, 1, zf, 'hopper', { dir: fdir, tr: t, i, role: 'hfu', m });
+    put(x, 2, zf, 'rail');
+    if (locks) { put(x, 2, zl, 'stone'); put(x, 3, zl, 'dust', { tr: t, m, role: 'lockIn' }); put(x, 1, zlf, 'stone'); put(x, 2, zlf, 'dust', { tr: t, m, role: 'lockFu' }); }
   }
-  const zMin = -1, zMax = cfg.tracks === 2 ? 7 : 2;
+  put(0, 3, zr, 'prail', { station: 'in', tr: t }); put(0, 2, zr, 'stone'); put(0, 1, zr, 'stone');
+  if (locks) { put(1, 3, zr, 'drail'); } else put(1, 3, zr, 'rail');
+  put(1, 2, zr, 'stone'); put(1, 1, zr, 'stone');
+  for (let x = 2; x < X0; x++) { put(x, 3, zr, 'rail'); put(x, 2, zr, 'stone'); }
+  put(0, 2, zf, 'prail', { station: 'fu', tr: t }); put(0, 1, zf, 'stone');
+  for (let x = 1; x < X0; x++) { put(x, 2, zf, 'rail'); put(x, 1, zf, 'stone'); }
+  for (let x = X0 + n; x <= xEnd; x++) {
+    const last = x === xEnd;
+    put(x, 3, zr, last ? 'prail' : 'rail', { on: true }); put(x, 2, zr, 'stone');
+    put(x, 2, zf, last ? 'prail' : 'rail', { on: true }); put(x, 1, zf, 'stone');
+  }
+  put(xB, 3, zr, 'rblock'); put(xB, 2, zf, 'rblock');
+  const sinks = [];
+  if (!box) { put(X0 - 1, 0, zr, 'chest', { face, role: 'out' }); put(X0 - 2, 0, zr, 'chest', { face, role: 'out' }); sinks[0] = [X0 - 1, 0, zr]; }
+  else { for (let x = X0 - 1; x >= -2; x--) put(x, 0, zr, 'hopper', { dir: 'nx' }); put(-3, 0, zr, 'chest', { face: 'nx', role: 'out' }); sinks[0] = [-3, 0, zr]; }
+  if (n > 16) {
+    if (!box) { put(X0 + n, 0, zr, 'chest', { face, role: 'out' }); sinks[1] = [X0 + n, 0, zr]; }
+    else { for (let x = X0 + n; x <= xB + 1; x++) put(x, 0, zr, 'hopper', { dir: 'px' }); put(xB + 2, 0, zr, 'chest', { face: 'px', role: 'out' }); sinks[1] = [xB + 2, 0, zr]; }
+  }
+  return sinks;
+}
+function genLayout(cfg) {
+  const ctx = layoutCtx(); const { B, occ, K, put } = ctx;
+  const n = cfg.mods * 8, X0 = GEO.X0, RUN = GEO.RUN, xEnd = X0 + n - 1 + RUN, xB = xEnd + 1;
+  const box = cfg.layout === 'box', under = cfg.layout === 'under', x8 = cfg.arch === 'x8';
+  const A = { lane: [], barrel: [], sinks: [], comp: [], mods: [], rowZ: [], fuelZ: [], ext: [], chests: [], pads: [] };
+  let zMin, zMax, maxY, fronts;
+  if (!x8) {
+    for (let t = 0; t < cfg.tracks; t++) {
+      const Z = zA => (t === 0 ? zA : 6 - zA);
+      const zr = Z(0), zl = Z(-1), zf = Z(1), zlf = Z(2);
+      A.rowZ[t] = zr; A.fuelZ[t] = zf;
+      const face = t === 0 ? 'nz' : 'pz';
+      A.sinks[t] = putRow(put, { n, X0, RUN, zr, zf, face, fdir: face, t, locks: true, zl, zlf, box });
+      for (let m = 0; m < cfg.mods; m++) A.mods.push({ t, m, x: X0 + m * 8 + 4, z: zl });
+      put(1, 3, zl, 'comparator', { face }); A.comp[t] = [1, 3, zl];
+      if (!box) {
+        put(0, 4, zr, 'chest', { face, role: 'in' }); A.lane[t] = [[0, 4, zr]];
+        if (cfg.lanes > 1) { put(-1, 3, zr, 'hopper', { dir: 'px' }); put(-1, 4, zr, 'chest', { face, role: 'in' }); A.lane[t].push([-1, 4, zr]); }
+        else put(-1, 3, zr, 'stone');
+        put(0, 4, zf, 'barrel'); put(0, 3, zf, 'hopper', { dir: 'd' }); put(-1, 2, zf, 'stone');
+        A.barrel[t] = [0, 4, zf];
+      } else {
+        const toRowFromLock = t === 0 ? 'pz' : 'nz';
+        put(-3, 4, zr, 'chest', { face: 'nx', role: 'in' }); for (let x = -3; x <= -1; x++) put(x, 3, zr, 'hopper', { dir: 'px' });
+        A.lane[t] = [[-3, 4, zr]];
+        if (cfg.lanes > 1) {
+          put(-3, 4, zl, 'chest', { face: 'nx', role: 'in' }); for (let x = -3; x <= -1; x++) put(x, 3, zl, 'hopper', { dir: 'px' });
+          put(0, 3, zl, 'hopper', { dir: toRowFromLock }); A.lane[t].push([-3, 4, zl]);
+        }
+        put(-3, 3, zf, 'barrel'); for (let x = -3; x <= -1; x++) put(x, 2, zf, 'hopper', { dir: 'px' });
+        A.barrel[t] = [-3, 3, zf];
+      }
+    }
+    zMin = -1; zMax = cfg.tracks === 2 ? 7 : 2; maxY = 4; fronts = cfg.tracks === 2 ? [-1, 7] : [-1];
+  } else {
+    // 4 fileiras (uma por módulo): M1 z0, M2 z3, M3 z5, M4 z8; carvão no meio de cada par; corredor em z4
+    const rows = [{ zr: 0, zf: 1, face: 'nz' }, { zr: 3, zf: 2, face: 'pz' }, { zr: 5, zf: 6, face: 'nz' }, { zr: 8, zf: 7, face: 'pz' }];
+    rows.forEach((r, t) => {
+      A.rowZ[t] = r.zr; A.fuelZ[t] = r.zf;
+      A.sinks[t] = putRow(put, { n, X0, RUN, zr: r.zr, zf: r.zf, face: r.face, fdir: r.face, t, locks: false, box });
+      A.mods.push({ t, m: 0, x: X0 + n / 2 - 0.5, z: r.zr });
+      // duas entradas na estação: por cima e por trás
+      put(0, 4, r.zr, 'hopper', { dir: 'd' });
+      put(-1, 4, r.zr, 'hopper', { dir: 'd' }); put(-1, 3, r.zr, 'hopper', { dir: 'px' });
+      A.lane[t] = [[0, 4, r.zr], [-1, 3, r.zr]];
+      // barril logo acima da estação do carvão: o carrinho-funil puxa direto dele
+      put(0, 3, r.zf, 'barrel'); put(-1, 2, r.zf, 'stone');
+      A.barrel[t] = [0, 3, r.zf];
+    });
+    // extrator: cada baú em cima de um carrinho-funil parado na quina de 4 funis
+    [{ padZ: [1, 2], tgt: [0, 3], corner: 2 }, { padZ: [6, 7], tgt: [5, 8], corner: 7 }].forEach((sd, s) => {
+      A.pads[s] = [];
+      for (let p = 0; p < 4; p++) {
+        const j = p >> 1, l = p & 1, x = l === 0 ? 0 : -1;
+        put(x, 5, sd.padZ[j], 'hopper', { dir: j === 0 ? 'nz' : 'pz', role: 'pad', s, p });
+        put(x, 5, sd.tgt[j], 'hopper', { dir: 'd' });
+        A.pads[s][p] = [x, 5, sd.padZ[j]];
+      }
+      put(0, 7, sd.corner, 'chest', { face: 'nz', role: 'in' });
+      A.chests[s] = [0, 7, sd.corner];
+      A.ext[s] = [0, 6, sd.corner];
+      for (const x of [-1, 0]) for (const z of sd.padZ) ctx.air.add(K(x, 6, z));
+    });
+    if (!under) for (let k = 0; k <= 6; k++) for (let y = 0; y <= 6 - k; y++) put(-1 - k, y, 4, 'step');
+    zMin = -1; zMax = 9; maxY = 7; fronts = [-1, 4, 9];
+  }
   const env = [];
   if (box) {
     for (let x = -2; x <= xB + 1; x++) for (let z = zMin - 1; z <= zMax + 1; z++) {
       const edge = x === -2 || x === xB + 1 || z === zMin - 1 || z === zMax + 1;
       if (edge) for (let y = 0; y <= 3; y++) if (!occ.has(K(x, y, z))) env.push({ x, y, z, t: 'planks' });
-      env.push({ x, y: 4, z, t: 'glass' });
+      if (!occ.has(K(x, 4, z))) env.push({ x, y: 4, z, t: 'glass' });
     }
   }
   if (under) {
     const carve = new Set();
-    const corridor = (z) => { for (let x = -4; x <= X0 + n; x++) for (let y = 0; y <= 1; y++) carve.add(K(x, y, z)); };
-    corridor(-1); if (cfg.tracks === 2) { corridor(7); for (let z = -1; z <= 7; z++) for (let y = 0; y <= 1; y++) carve.add(K(-4, y, z)); }
-    for (let k = 1; k <= 5; k++) { const x = -10 + k, wy = 5 - k; for (let y = wy; y <= 4; y++) carve.add(K(x, y, -1)); }
-    for (let x = -11; x <= xB + 3; x++) for (let z = zMin - 3; z <= zMax + 3; z++) for (let y = -1; y <= 4; y++) {
-      const k = K(x, y, z); if (occ.has(k) || carve.has(k)) continue;
-      env.push({ x, y, z, t: y === 4 ? 'grass' : y === -1 ? 'floor' : 'dirt' });
+    fronts.forEach(z => { for (let x = -4; x <= X0 + n; x++) for (let y = 0; y <= 1; y++) carve.add(K(x, y, z)); });
+    for (let z = fronts[0]; z <= fronts[fronts.length - 1]; z++) for (let y = 0; y <= 1; y++) carve.add(K(-4, y, z));
+    for (let wy = 0; wy <= maxY; wy++) { const x = -5 - wy; for (let y = wy; y <= maxY; y++) carve.add(K(x, y, -1)); }
+    for (let x = -7 - maxY; x <= xB + 3; x++) for (let z = zMin - 3; z <= zMax + 3; z++) for (let y = -1; y <= maxY; y++) {
+      const k = K(x, y, z); if (occ.has(k) || carve.has(k) || ctx.air.has(k)) continue;
+      env.push({ x, y, z, t: y === maxY ? 'grass' : y === -1 ? 'floor' : 'dirt' });
     }
   } else {
-    for (let x = -6; x <= xB + 4; x++) for (let z = zMin - 4; z <= zMax + 4; z++) env.push({ x, y: -1, z, t: 'grass' });
+    for (let x = -9; x <= xB + 4; x++) for (let z = zMin - 4; z <= zMax + 4; z++) env.push({ x, y: -1, z, t: 'grass' });
   }
-  return { blocks: B, env, A, n, xEnd, xB, zMin, zMax, maxY: 4 };
+  return { blocks: B, env, A, n, xEnd, xB, zMin, zMax, maxY, x8 };
 }
 
 /* ===================== Cena 3D ===================== */
@@ -728,6 +862,7 @@ const ROT = { nz: 0, pz: Math.PI, nx: Math.PI / 2, px: -Math.PI / 2 };   // fren
 const HOPROT = { px: 0, nx: Math.PI, pz: -Math.PI / 2, nz: Math.PI / 2 }; // bico (+x) girado para a direção
 // a cena é espelhada em x para a entrada ficar à esquerda de quem olha a frente das fornalhas
 const WX = x => -x - 0.5;
+const GEO = { X0: 5, RUN: 4 };
 const FACEW = d => ROT[d === 'px' ? 'nx' : d === 'nx' ? 'px' : d];
 const HOPW = d => HOPROT[d === 'px' ? 'nx' : d === 'nx' ? 'px' : d];
 
@@ -799,16 +934,17 @@ function buildScene(fitCamera) {
   if (V.world) { V.scene.remove(V.world); V.meshes.forEach(m => m.geometry !== V.G.cube && m.dispose && m.dispose()); }
   V.meshes = []; V.carts = []; V.partList = [];
   const L = genLayout(cfg); V.layout = L;
-  const layer = +$('layer').value; const maxY = layer >= 5 ? 99 : layer;
+  const sl = $('layer'); sl.max = L.maxY + 1; if (state.layerAll || +sl.value > L.maxY + 1) sl.value = L.maxY + 1;
+  const layer = +sl.value; const maxY = layer > L.maxY ? 99 : layer; V.maxY = maxY;
   const terrain = $('terrain').value;
   const world = new THREE.Group(); V.world = world;
-  const cx = (L.xB - 3) / 2, cz = (L.zMin + L.zMax + 1) / 2;
+  const cx = (L.xB + (L.x8 ? -7 : -3)) / 2, cz = (L.zMin + L.zMax + 1) / 2;
   world.position.set(cx + 0.5, -1.5, -cz);
   V.scene.add(world);
   const o = new THREE.Object3D();
   const groups = {};
   const add = (key, b) => { (groups[key] = groups[key] || []).push(b); };
-  const refs = { furnace: [], hin: [], hfu: [], dust: [], station: [] };
+  const refs = { furnace: [], hin: [], hfu: [], dust: [], station: [], pad: [[], []] };
   L.blocks.forEach(b => {
     if (b.y > maxY) return;
     switch (b.t) {
@@ -819,7 +955,7 @@ function buildScene(fitCamera) {
   });
   if (terrain !== 'hide') {
     // no modo translúcido do subterrâneo só a casca do terreno aparece; camadas demais viram neblina
-    const shell = b => b.y === 4 || b.y === -1;
+    const shell = b => b.y === L.maxY || b.y === -1;
     L.env.forEach(b => {
       if (!(b.y <= maxY || (b.t === 'grass' && b.y < 0))) return;
       if (terrain === 'ghost' && cfg.layout === 'under' && !shell(b)) return;
@@ -832,7 +968,7 @@ function buildScene(fitCamera) {
     hopD: [V.G.hopD, V.M.hopper], hopS: [V.G.hopS, V.M.hopper], hopIn: [V.G.hopIn, V.M.hopIn],
     chest: [V.G.chest, V.M.chest], barrel: [V.G.cube, V.M.barrel],
     rail: [V.G.flat, V.M.rail], prail: [V.G.flat, V.M.prail], drail: [V.G.flat, V.M.drail], dust: [V.G.dust, V.M.dust],
-    rblock: [V.G.cube, V.M.rblock], comparator: [V.G.slab, V.M.comparator],
+    rblock: [V.G.cube, V.M.rblock], comparator: [V.G.slab, V.M.comparator], step: [V.G.cube, V.M.stone],
   };
   const ghost = terrain === 'ghost';
   const ghostMats = {};
@@ -864,6 +1000,7 @@ function buildScene(fitCamera) {
       o.scale.setScalar(1); o.updateMatrix(); mesh.setMatrixAt(idx, o.matrix);
       if (tint) mesh.setColorAt(idx, new THREE.Color(key === 'dust' ? 0x5a1010 : 0xffffff));
       if (b.role === 'hin' || b.role === 'hfu') { const r = refs[b.role]; (r[b.tr] = r[b.tr] || [])[b.i] = (r[b.tr][b.i] || []).concat([{ mesh, idx }]); }
+      if (b.role === 'pad') (refs.pad[b.s][b.p] = refs.pad[b.s][b.p] || []).push({ mesh, idx });
       if (key === 'dust') refs.dust.push({ mesh, idx, b });
       if (key === 'prail' && b.station) refs.station.push({ mesh, idx, b });
     });
@@ -874,17 +1011,25 @@ function buildScene(fitCamera) {
   V.refs = refs;
 
   // carrinhos
-  for (let t = 0; t < cfg.tracks; t++) {
+  const mkCart = (kind) => {
+    const g = new THREE.Group();
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.42, 0.66), V.M.cart); base.position.y = -0.24; g.add(base);
+    const inner = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.03, 0.5), V.M.cartIn); inner.position.y = -0.02; g.add(inner);
+    const load = new THREE.Mesh(new THREE.BoxGeometry(0.66, 1, 0.46), kind === 'fu' ? V.M.loadCoal : V.M.loadOre); g.add(load);
+    g.userData.load = load; world.add(g); V.carts.push(g); return g;
+  };
+  const nTracks = L.x8 ? 4 : cfg.tracks;
+  for (let t = 0; t < nTracks; t++) {
     ['in', 'fu'].forEach(kind => {
-      const g = new THREE.Group();
-      const base = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.42, 0.66), V.M.cart); base.position.y = -0.24; g.add(base);
-      const inner = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.03, 0.5), V.M.cartIn); inner.position.y = -0.02; g.add(inner);
-      const load = new THREE.Mesh(new THREE.BoxGeometry(0.66, 1, 0.46), kind === 'in' ? V.M.loadOre : V.M.loadCoal); g.add(load);
-      const y = kind === 'in' ? 3 : 2, z = kind === 'in' ? L.A.rowZ[t] : L.A.fuelZ[t];
-      g.userData = { t, kind, y, z, load };
-      world.add(g); V.carts.push(g);
+      const g = mkCart(kind);
+      Object.assign(g.userData, { t, kind, y: kind === 'in' ? 3 : 2, z: kind === 'in' ? L.A.rowZ[t] : L.A.fuelZ[t] });
     });
   }
+  if (L.x8) L.A.ext.forEach((e, s) => {
+    const g = mkCart('ext');
+    Object.assign(g.userData, { s, kind: 'ext', y: e[1], z: e[2] });
+    g.rotation.y = Math.PI / 4;
+  });
   // partículas
   const PN = 600;
   V.parts = new THREE.InstancedMesh(V.G.part, V.M.part, PN);
@@ -900,7 +1045,7 @@ function buildScene(fitCamera) {
   V.forceRefresh = true;
 }
 function fitView(L) {
-  const spanX = L.xB + 8, spanZ = L.zMax - L.zMin + 6;
+  const spanX = L.xB + (L.x8 ? 12 : 8), spanZ = L.zMax - L.zMin + 6;
   const el = $('view'); const aspect = el.clientWidth / Math.max(1, el.clientHeight);
   if (aspect < 1) {
     // retrato: olha a fileira na diagonal a partir da entrada, para ela ocupar a altura da tela
@@ -923,7 +1068,12 @@ function buildLabels(L) {
     V.labels.push({ el, p: new THREE.Vector3(WX(p[0]), p[1] + .5, p[2] + .5), dyn });
   };
   const cfg = state.cfg; const two = cfg.tracks === 2;
-  for (let t = 0; t < cfg.tracks; t++) {
+  if (L.x8) {
+    L.A.chests.forEach((c, s) => mk('Entrada ' + (s ? 'B' : 'A'), [c[0], c[1] + 0.9, c[2]]));
+    mk('Carvão (4 barris)', [L.A.barrel[0][0] - 1.5, L.A.barrel[0][1] - 0.4, (L.A.barrel[0][2] + L.A.barrel[1][2]) / 2]);
+    L.A.sinks.forEach((sk, t) => sk.forEach((s, g) => mk('Saída ' + (t + 1) + (sk.length > 1 ? '.' + (g + 1) : ''), [s[0], s[1] + 0.9, s[2]])));
+  }
+  for (let t = 0; t < (L.x8 ? 0 : cfg.tracks); t++) {
     const sfx = two ? (t === 0 ? ' A' : ' B') : '';
     const lc = L.A.lane[t][0];
     mk('Entrada' + sfx, [lc[0] - (cfg.lanes > 1 && cfg.layout !== 'box' ? 0.5 : 0), lc[1] + 1.1, lc[2]]);
@@ -932,6 +1082,7 @@ function buildLabels(L) {
   }
   L.A.mods.forEach(md => mk('M' + (md.m + 1), [md.x, 4.3, md.z], '', { kind: 'mod', t: md.t, m: md.m }));
   V.carts.forEach(cg => {
+    if (L.x8 && cg.userData.kind === 'fu') return;
     const el = document.createElement('div'); el.className = 'tag cart'; host.appendChild(el);
     V.labels.push({ el, p: new THREE.Vector3(), dyn: { kind: 'cart', g: cg } });
   });
@@ -959,8 +1110,16 @@ function updateParticles(now) {
 }
 
 /* ===================== Estado + laço ===================== */
-const state = { cfg: null, S: null, speed: 4, paused: false, acc: 0, last: 0 };
+const state = { cfg: null, S: null, speed: 4, paused: false, acc: 0, last: 0, layerAll: true };
+function syncArchUI() {
+  const x8 = radio('arch') === 'x8';
+  $('rowTracks').hidden = x8; $('rowLanes').hidden = x8;
+  $('modsLbl').textContent = x8 ? 'Fornalhas/módulo' : 'Módulos de 8';
+  ['1', '2', '3', '4'].forEach(v => { document.querySelector(`label[for="md-${v}"]`).textContent = x8 ? String(8 * v) : v; });
+  $('addCoal').textContent = x8 ? '+1 pack em cada barril' : '+1 pack no barril';
+}
 function newSim(keepCamera) {
+  syncArchUI();
   state.cfg = ui.cfg();
   state.S = Sim.create(state.cfg);
   state.S.ev = [];
@@ -970,19 +1129,28 @@ function newSim(keepCamera) {
   updateStructNote(); updateLayerName(); updateBOM(); markLayoutCard();
 }
 function updateStructNote() {
-  const c = state.cfg, N = c.tracks * c.mods * 8, lanes = c.tracks * c.lanes;
-  $('structNote').textContent = `${N} ${c.kind === 'blast' ? 'altos-fornos' : 'fornalhas'} · ${lanes} ${lanes > 1 ? 'vias' : 'via'} de carga (${fmt1(lanes * 2.5)} itens/s) · até ${c.mods} ${c.mods > 1 ? 'packs' : 'pack'} por onda em cada carrinho.`;
+  const c = state.cfg, pull = 20 / c.pullCd;
+  if (c.arch === 'x8') {
+    const n = c.mods * 8;
+    $('structNote').textContent = `${4 * n} ${c.kind === 'blast' ? 'altos-fornos' : 'fornalhas'} em 4 módulos de ${n} · 2 carrinhos extratores (${fmt1(2 * pull)} itens/s) → 8 funis (${fmt1(Math.min(2 * pull, 20))} itens/s) → 4 correntes de 5 itens/s.`;
+    return;
+  }
+  const N = c.tracks * c.mods * 8, lanes = c.tracks * c.lanes;
+  const rate = c.tracks * ((c.layout === 'box' ? 2.5 : pull) + (c.lanes > 1 ? 2.5 : 0));
+  $('structNote').textContent = `${N} ${c.kind === 'blast' ? 'altos-fornos' : 'fornalhas'} · ${lanes} ${lanes > 1 ? 'vias' : 'via'} de carga (até ${fmt1(rate)} itens/s) · até ${c.mods} ${c.mods > 1 ? 'packs' : 'pack'} por onda em cada carrinho.`;
 }
 function updateLayerName() {
-  const v = +$('layer').value; $('layerName').textContent = 'Mostrando: ' + (LAYER_NAMES[v] || 'tudo');
+  const v = +$('layer').value, names = LAYER_NAMES[state.cfg.arch] || LAYER_NAMES.row; $('layerName').textContent = 'Mostrando: ' + (v < names.length ? names[v] : 'tudo');
 }
 function markLayoutCard() { document.querySelectorAll('.lay').forEach(el => el.classList.toggle('sel', el.dataset.lay === state.cfg.layout)); }
 
 function blockC(x, y, z, dy = 0) { return new THREE.Vector3(WX(x), y + .5 + dy, z + .5); }
+function cornerV(e) { return new THREE.Vector3(-e[0], e[1] + 0.3, e[2]); }
+function modOn(S, t, m) { const tr = S.tracks[t]; if (!S.auto) return true; return S.B ? tr.fed : m < tr.active; }
 function handleEvents() {
   const S = state.S, L = V.layout; if (!V.ok || !L) { S.ev.length = 0; return; }
   const sp = state.speed; const dur = Math.max(0.14, 0.4 / sp);
-  const X0 = Sim.X0;
+  const X0 = GEO.X0;
   const showChain = sp <= 4;
   const cOre = handleEvents.cOre || (handleEvents.cOre = new THREE.Color(0xc9a27a));
   const cIng = handleEvents.cIng || (handleEvents.cIng = new THREE.Color(0xeceef0));
@@ -1001,6 +1169,9 @@ function handleEvents() {
       case 'ff': spawn(blockC(X0 + e.i, 1, zf), blockC(X0 + e.i, 1, zr), cCoal, dur); break;
       case 'fo': spawn(blockC(X0 + e.i, 1, zr, -0.2), blockC(X0 + e.i, 0, zr), cIng, dur); break;
       case 'oo': if (showChain) spawn(blockC(X0 + e.i, 0, zr), blockC(X0 + e.j, 0, zr), cIng, dur); else budget++; break;
+      case 'ext': { const c = L.A.chests[e.s], x = L.A.ext[e.s]; spawn(blockC(c[0], c[1], c[2]), cornerV(x), cOre, dur); break; }
+      case 'pad': { const p = L.A.pads[e.s][e.p]; spawn(cornerV(L.A.ext[e.s]), blockC(p[0], p[1], p[2], 0.2), cOre, dur); break; }
+      case 'pe': { const p = L.A.pads[e.s][e.p], lc = L.A.lane[2 * e.s + (e.p >> 1)][e.p & 1]; spawn(blockC(p[0], p[1], p[2]), blockC(lc[0], lc[1], lc[2]), cOre, dur * 1.5); break; }
       case 'sink': { const s = L.A.sinks[e.tr][e.g]; spawn(blockC(X0 + e.i, 0, zr), blockC(s[0], s[1], s[2]), cIng, dur * (state.cfg.layout === 'box' ? 2.5 : 1)); break; }
     }
     budget--;
@@ -1044,12 +1215,21 @@ function updateDynamic() {
     const dim = updateDynamic.dim || (updateDynamic.dim = new THREE.Color(0.5, 0.46, 0.46));
     R.station.forEach(({ mesh, idx, b }) => { const tr = S.tracks[b.tr]; const c = b.station === 'in' ? tr.cart : tr.fcart; mesh.setColorAt(idx, c.parked ? dim : cFree); touched.add(mesh); });
   }
+  if (S.B) {
+    const padKey = S.sides.map(sd => sd.on).join(',');
+    if (padKey !== V.lastPadKey || force) {
+      V.lastPadKey = padKey;
+      S.sides.forEach((sd, si) => (R.pad[si] || []).forEach((list, p) => (list || []).forEach(({ mesh, idx }) => { mesh.setColorAt(idx, S.auto && Sim.padLocked(sd, p) ? cLock : cFree); touched.add(mesh); })));
+    }
+  }
   touched.forEach(m => { m.instanceColor.needsUpdate = true; });
   // carrinhos
-  const maxY = +$('layer').value >= 5 ? 99 : +$('layer').value;
+  const maxY = V.maxY;
   V.carts.forEach(g => {
-    const { t, kind, y, z, load } = g.userData; const tr = S.tracks[t]; const c = kind === 'in' ? tr.cart : tr.fcart;
-    g.position.set(WX(c.x), y + .5 - 0.02, z + .5); g.visible = y <= maxY;
+    const { t, s, kind, y, z, load } = g.userData;
+    const c = kind === 'ext' ? S.sides[s].cart : kind === 'in' ? S.tracks[t].cart : S.tracks[t].fcart;
+    if (kind === 'ext') g.position.set(0, y + .5 - 0.02, z); else g.position.set(WX(c.x), y + .5 - 0.02, z + .5);
+    g.visible = y <= maxY;
     const h = Math.max(0.001, 0.38 * c.items / Sim.CARTCAP); load.scale.y = h; load.position.y = -0.02 + h / 2; load.visible = c.items > 0;
   });
 }
@@ -1062,13 +1242,14 @@ function updateLabels() {
   V.world.updateMatrixWorld();
   V.labels.forEach(lb => {
     if (lb.dyn && lb.dyn.kind === 'cart') {
-      const g = lb.dyn.g; const { t, kind } = g.userData; const c = kind === 'in' ? S.tracks[t].cart : S.tracks[t].fcart;
+      const g = lb.dyn.g; const { t, s, kind } = g.userData; const c = kind === 'ext' ? S.sides[s].cart : kind === 'in' ? S.tracks[t].cart : S.tracks[t].fcart;
       lb.p.set(g.position.x, g.position.y + 0.75, g.position.z);
-      const txt = (kind === 'in' ? '▣ ' : '◆ ') + c.items; if (lb.el.textContent !== txt) lb.el.textContent = txt;
+      const txt = (kind === 'fu' ? '◆ ' : '▣ ') + c.items; if (lb.el.textContent !== txt) lb.el.textContent = txt;
       lb.el.hidden = !g.visible;
     } else if (lb.dyn && lb.dyn.kind === 'mod') {
-      const tr = S.tracks[lb.dyn.t]; const on = !auto || lb.dyn.m < tr.active;
-      const txt = `M${lb.dyn.m + 1}${state.cfg.tracks > 1 ? (lb.dyn.t ? 'B' : 'A') : ''}` + (w < 640 ? '' : ` · ${on ? 'ligado' : 'travado'}`);
+      const on = modOn(S, lb.dyn.t, lb.dyn.m);
+      const name = S.B ? `M${lb.dyn.t + 1}` : `M${lb.dyn.m + 1}${state.cfg.tracks > 1 ? (lb.dyn.t ? 'B' : 'A') : ''}`;
+      const txt = name + (w < 640 ? '' : ` · ${on ? 'ligado' : 'travado'}`);
       if (lb.el.textContent !== txt) lb.el.textContent = txt;
       lb.el.className = 'tag ' + (on ? 'on' : 'off');
     }
@@ -1084,23 +1265,27 @@ function updatePanel() {
   $('hudTime').textContent = fmtTime(S.t / 20);
   $('hudSpeed').textContent = state.paused ? 'pausado' : state.speed + '×';
   let inChest = 0, inCart = 0, queued = 0, burning = 0, active = 0, fuelStock = 0, fuelCart = 0;
-  S.tracks.forEach(tr => {
+  S.tracks.forEach((tr, t) => {
     tr.lanes.forEach(l => { inChest += l.chest + l.n; });
     inCart += tr.cart.items; fuelCart += tr.fcart.items;
     tr.f.forEach((f, i) => { queued += f.in + tr.hin[i].n; if (f.burn > 0) burning++; fuelStock += f.fuel + tr.hfu[i].n; });
-    active += (c.mode === 'auto' ? tr.active : c.mods) * 8;
+    for (let m = 0; m < c.mods; m++) if (modOn(S, t, S.B ? 0 : m)) active += 8;
   });
-  const total = c.tracks * c.mods * 8;
-  const lw = S.tracks.map(tr => tr.lastWave).filter(Boolean);
-  const comp = lw.length ? lw.map(w => `${w.ss}→${w.active}`).join(' · ') : '—';
+  let extra = 0;
+  S.sides.forEach(sd => { inChest += sd.chest; extra += sd.cart.items + sd.pads.reduce((a, p) => a + p.n, 0); });
+  const total = S.tracks.length * c.mods * 8;
+  let comp;
+  if (S.B) comp = S.auto ? S.sides.map((sd, i) => `${i ? 'B' : 'A'} ${sd.on ? sd.ss : 0}→${sd.on}`).join(' · ') : 'todos ligados';
+  else { const lw = S.tracks.map(tr => tr.lastWave).filter(Boolean); comp = lw.length ? lw.map(w => `${w.ss}→${w.active}`).join(' · ') : '—'; }
   const wasteCoal = st.waste / S.burn;
   const rows = [
     ['Itens na entrada', fmtInt(inChest)],
-    ['No carrinho', fmtInt(inCart)],
+    ...(S.B ? [['No extrator (carrinhos + 8 funis)', fmtInt(extra)]] : []),
+    [S.B ? 'Nos 4 distribuidores' : 'No carrinho', fmtInt(inCart)],
     ['Na fila das fornalhas', fmtInt(queued)],
     ['Fornalhas queimando', `${burning} / ${total}`],
     ['Fornalhas liberadas', `${active} / ${total}`],
-    ['Comparador (força→módulos)', comp],
+    [S.B ? 'Baús (força→módulos)' : 'Comparador (força→módulos)', comp],
     ['No baú de saída', `${fmtInt(st.collected)} / ${fmtInt(st.added)}`],
     ['Carvão aceso', fmtInt(st.coal)],
     ['Carvão desperdiçado', fmt1(wasteCoal)],
@@ -1109,7 +1294,8 @@ function updatePanel() {
   const html = rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
   if ($('stats').innerHTML !== html) $('stats').innerHTML = html;
   const chips = [];
-  S.tracks.forEach((tr, t) => { for (let m = 0; m < c.mods; m++) { const on = c.mode !== 'auto' || m < tr.active; chips.push(`<span class="chip ${on ? 'on' : 'off'}">M${m + 1}${c.tracks > 1 ? (t ? 'B' : 'A') : ''}</span>`); } });
+  if (S.B) S.tracks.forEach((tr, t) => { const on = modOn(S, t, 0); chips.push(`<span class="chip ${on ? 'on' : 'off'}">M${t + 1} · ${tr.n}</span>`); });
+  else S.tracks.forEach((tr, t) => { for (let m = 0; m < c.mods; m++) { const on = modOn(S, t, m); chips.push(`<span class="chip ${on ? 'on' : 'off'}">M${m + 1}${c.tracks > 1 ? (t ? 'B' : 'A') : ''}</span>`); } });
   const ch = chips.join(''); if ($('modChips').innerHTML !== ch) $('modChips').innerHTML = ch;
   const b = $('batch');
   if (st.added === 0) { b.textContent = 'Nada na entrada.'; b.classList.remove('done'); }
@@ -1135,16 +1321,16 @@ function frame(now) {
 /* ===================== Lista de materiais ===================== */
 function updateBOM() {
   const L = genLayout(state.cfg); const cnt = {};
-  const name = { furnace: state.cfg.kind === 'blast' ? 'Alto-forno' : 'Fornalha', hopper: 'Funil', chest: 'Baú', barrel: 'Barril', rail: 'Trilho', prail: 'Trilho elétrico', drail: 'Trilho detector', dust: 'Pó de redstone (travas)', rblock: 'Bloco de redstone', comparator: 'Comparador', stone: 'Bloco sólido qualquer' };
+  const name = { furnace: state.cfg.kind === 'blast' ? 'Alto-forno' : 'Fornalha', hopper: 'Funil', chest: 'Baú', barrel: 'Barril', rail: 'Trilho', prail: 'Trilho elétrico', drail: 'Trilho detector', dust: 'Pó de redstone (travas)', rblock: 'Bloco de redstone', comparator: 'Comparador', stone: 'Bloco sólido qualquer', step: 'Blocos da escada até os baús' };
   L.blocks.forEach(b => { cnt[b.t] = (cnt[b.t] || 0) + 1; });
-  const carts = state.cfg.tracks * 2;
-  const order = ['furnace', 'hopper', 'chest', 'barrel', 'rail', 'prail', 'drail', 'comparator', 'rblock', 'dust', 'stone'];
+  const carts = L.x8 ? 10 : state.cfg.tracks * 2;
+  const order = ['furnace', 'hopper', 'chest', 'barrel', 'rail', 'prail', 'drail', 'comparator', 'rblock', 'dust', 'stone', 'step'];
   let html = order.filter(k => cnt[k]).map(k => `<div><span>${name[k]}</span><span>${fmtInt(cnt[k])}</span></div>`).join('');
   html += `<div><span>Carrinho com funil</span><span>${carts}</span></div>`;
   if (state.cfg.layout === 'box') html += `<div><span>Tábuas (paredes)</span><span>${fmtInt(L.env.filter(b => b.t === 'planks').length)}</span></div><div><span>Vidro (tampa)</span><span>${fmtInt(L.env.filter(b => b.t === 'glass').length)}</span></div>`;
   $('bom').innerHTML = html;
   const ferro = cnt.hopper * 5 + carts * (5 + 5);
-  $('bomNote').textContent = `Contado direto do modelo 3D. Não inclui a lógica de controle (escada de pó, repetidores, tochas). Só os funis e carrinhos pedem cerca de ${fmtInt(ferro)} lingotes de ferro.`;
+  $('bomNote').textContent = `Contado direto do modelo 3D. Não inclui a lógica de controle (${L.x8 ? '2 comparadores nos baús, travas e tochas que travam os funis da quina' : 'escada de pó, repetidores, tochas'}). Só os funis e carrinhos pedem cerca de ${fmtInt(ferro)} lingotes de ferro.`;
 }
 
 /* ===================== Gráficos (SVG) ===================== */
@@ -1162,24 +1348,26 @@ function lineChart(host, o) {
   const draw = () => {
     const W = Math.max(300, plot.clientWidth || 520), narrow = W < 460;
     const H = narrow ? 260 : 300, ml = 52, mr = narrow ? 14 : 84, mt = 26, mb = 42;
-    const xs = o.xTicks, x0 = xs[0], x1 = xs[xs.length - 1];
-    const raw = Math.max(...o.series.flatMap(s => s.points.map(p => p[1]))) * 1.04;
+    const xs = [...new Set(o.series.flatMap(s => s.points.map(p => p[0])))].sort((a, b) => a - b), x0 = xs[0], x1 = xs[xs.length - 1];
+    // a escala segue as séries de dados; a linha tracejada de referência é cortada na borda do gráfico
+    const raw = Math.max(...o.series.filter(s => !s.dash).flatMap(s => s.points.map(p => p[1]))) * 1.08;
     const step = niceStep(raw / 4), ymax = Math.ceil(raw / step) * step;
     const X = v => ml + (v - x0) / (x1 - x0) * (W - ml - mr);
     const Y = v => mt + (1 - v / ymax) * (H - mt - mb);
     const yt = []; for (let v = 0; v <= ymax + 1e-9; v += step) yt.push(v);
-    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.title}">`;
+    const cid = 'clip' + Math.random().toString(36).slice(2, 8);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.title}"><defs><clipPath id="${cid}"><rect x="${ml}" y="${mt}" width="${W - ml - mr}" height="${H - mt - mb}"/></clipPath></defs>`;
     yt.forEach(v => { s += `<line x1="${ml}" x2="${W - mr}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${ml - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${o.yFmt(v)}</text>`; });
-    xs.forEach(v => { s += `<text x="${X(v)}" y="${H - mb + 18}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${v}</text>`; });
+    o.xTicks.forEach(v => { s += `<text x="${X(v)}" y="${H - mb + 18}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${v}</text>`; });
     s += `<text x="${(ml + W - mr) / 2}" y="${H - 4}" text-anchor="middle" font-size="11.5" fill="var(--muted)">${o.xLabel}</text>`;
     s += `<text x="${ml - 8}" y="11" font-size="11.5" fill="var(--muted)" text-anchor="start" transform="translate(${-(ml - 8) + 2} 0)">${o.yLabel}</text>`;
     const labels = [];
     o.series.forEach(se => {
       const pts = se.points; if (!pts.length) return;
       const d = pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
-      s += `<path d="${d}" fill="none" stroke="var(${se.color})" stroke-width="2" ${se.dash ? 'stroke-dasharray="5 4"' : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
+      s += `<path d="${d}" fill="none" stroke="var(${se.color})" stroke-width="2" ${se.dash ? `stroke-dasharray="5 4" clip-path="url(#${cid})"` : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
       if (!se.dash) pts.forEach(p => { s += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4" fill="var(${se.color})" stroke="var(--surface)" stroke-width="2"/>`; });
-      const lp = pts[pts.length - 1]; labels.push({ y: Y(lp[1]), x: X(lp[0]), txt: se.short, c: se.color });
+      const lp = pts[pts.length - 1]; labels.push({ y: Math.max(mt + 4, Y(lp[1])), x: X(lp[0]), txt: se.short, c: se.color });
     });
     if (!narrow) {
       labels.sort((a, b) => a.y - b.y);
@@ -1206,7 +1394,7 @@ function lineChart(host, o) {
   };
   draw();
   const det = document.createElement('details'); det.className = 'tbl';
-  det.innerHTML = `<summary>Ver tabela</summary><div class="tablewrap"><table><thead><tr><th>${o.xUnit}</th>${o.series.map(s => `<th>${s.short}</th>`).join('')}</tr></thead><tbody>${o.xTicks.map(x => `<tr><td class="num">${x}</td>${o.series.map(s => { const p = s.points.find(q => q[0] === x); return `<td class="num">${p ? o.tipFmt(p[1]) : '—'}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
+  det.innerHTML = `<summary>Ver tabela</summary><div class="tablewrap"><table><thead><tr><th>${o.xUnit}</th>${o.series.map(s => `<th>${s.short}</th>`).join('')}</tr></thead><tbody>${[...new Set(o.series.flatMap(s => s.points.map(p => p[0])))].sort((a, b) => a - b).map(x => `<tr><td class="num">${x}</td>${o.series.map(s => { const p = s.points.find(q => q[0] === x); return `<td class="num">${p ? o.tipFmt(p[1]) : '—'}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
   host.appendChild(det);
   host._redraw = draw;
 }
@@ -1215,70 +1403,80 @@ function lineChart(host, o) {
 function runAnalysis() {
   const c = ui.cfg();
   const base = { layout: c.layout, mode: 'fixed', kind: c.kind, cartSpeed: c.cartSpeed, pullCd: c.pullCd };
-  const Ns = [8, 16, 24, 32, 40, 48, 56, 64];
+  const P = 20;
+  const A1 = { arch: 'row', tracks: 1, lanes: 1 }, A2 = { arch: 'row', tracks: 2, lanes: 1 }, B8 = { arch: 'x8' };
   const one = { a: [], b: [], c: [] }, cont = { a: [], b: [], c: [] };
-  Ns.forEach(N => {
-    one.a.push([N, Sim.runBatch({ ...base, tracks: 1, lanes: 1, mods: N / 8 }, 1).sec]);
-    one.b.push([N, Sim.runBatch({ ...base, tracks: 1, lanes: 2, mods: N / 8 }, 1, { spread: 'split' }).sec]);
-    if (N % 16 === 0) one.c.push([N, Sim.runBatch({ ...base, tracks: 2, lanes: 2, mods: N / 16 }, 1, { spread: 'split' }).sec]);
-    const P = 20;
-    cont.a.push([N, P * 64 / Sim.runBatch({ ...base, tracks: 1, lanes: 1, mods: N / 8 }, P).sec * 3600]);
-    cont.b.push([N, P * 64 / Sim.runBatch({ ...base, tracks: 1, lanes: 2, mods: N / 8 }, P).sec * 3600]);
-    if (N % 16 === 0) cont.c.push([N, P * 64 / Sim.runBatch({ ...base, tracks: 2, lanes: 2, mods: N / 16 }, P).sec * 3600]);
+  const thr = (cfg) => P * 64 / Sim.runBatch({ ...base, ...cfg }, P).sec * 3600;
+  [1, 2, 3, 4, 5, 6, 7, 8].forEach(m => {
+    one.a.push([8 * m, Sim.runBatch({ ...base, ...A1, mods: m }, 1).sec]);
+    cont.a.push([8 * m, thr({ ...A1, mods: m })]);
+  });
+  [1, 2, 3, 4, 6, 8].forEach(m => {
+    one.b.push([16 * m, Sim.runBatch({ ...base, ...A2, mods: m }, 1, { spread: 'split' }).sec]);
+    cont.b.push([16 * m, thr({ ...A2, mods: m })]);
+  });
+  [1, 2, 3, 4].forEach(m => {
+    one.c.push([32 * m, Sim.runBatch({ ...base, ...B8, mods: m }, 1, { spread: 'split' }).sec]);
+    cont.c.push([32 * m, thr({ ...B8, mods: m })]);
   });
   const cookS = c.kind === 'blast' ? 5 : 10;
-  const ideal1 = Ns.map(N => [N, Math.ceil(64 / N) * cookS]);
-  const idealC = Ns.map(N => [N, N * 3600 / cookS]);
+  const allN = [...new Set([...one.a, ...one.b, ...one.c].map(p => p[0]))].sort((x, y) => x - y);
+  const ideal1 = allN.map(N => [N, Math.ceil(64 / N) * cookS]);
+  const idealC = allN.map(N => [N, N * 3600 / cookS]);
+  const ticks = [8, 16, 32, 48, 64, 96, 128];
   lineChart($('chart1'), {
     title: 'Tempo para queimar 1 pack', sub: 'Do baú de entrada até o último lingote no baú de saída, em segundos.',
-    xTicks: Ns, xLabel: 'fornalhas', xUnit: 'fornalhas', yLabel: 'segundos', yFmt: v => fmtInt(v), tipFmt: v => fmt1(v) + ' s',
+    xTicks: ticks, xLabel: 'fornalhas', xUnit: 'fornalhas', yLabel: 'segundos', yFmt: v => fmtInt(v), tipFmt: v => fmt1(v) + ' s',
     series: [
-      { name: '1 carrinho, pack inteiro numa via', short: '1 via', color: '--s1', points: one.a },
-      { name: '1 carrinho, pack dividido em 2 vias', short: '2 vias', color: '--s2', points: one.b },
-      { name: '2 carrinhos, pack dividido em 4 vias', short: '4 vias', color: '--s3', points: one.c },
+      { name: 'Carrinho por fileira, 1 fileira', short: '1 fileira', color: '--s1', points: one.a },
+      { name: 'Carrinho por fileira, 2 fileiras (pack dividido)', short: '2 fileiras', color: '--s2', points: one.b },
+      { name: 'Extrator 8×, 4 módulos (pack dividido)', short: 'extrator 8×', color: '--s3', points: one.c },
       { name: 'só o tempo de queima', short: 'queima', color: '--muted', dash: true, points: ideal1 },
     ],
   });
   lineChart($('chart2'), {
-    title: 'Vazão com fila grande', sub: '20 packs esperando na entrada, espalhados entre os baús. Itens por hora.',
-    xTicks: Ns, xLabel: 'fornalhas', xUnit: 'fornalhas', yLabel: 'itens/hora', yFmt: v => v >= 1000 ? fmt1(v / 1000).replace(',0', '') + ' mil' : fmtInt(v), tipFmt: v => fmtInt(v) + '/h',
+    title: 'Vazão com fila grande', sub: `${P} packs esperando, espalhados entre os baús. Itens por hora.`,
+    xTicks: ticks, xLabel: 'fornalhas', xUnit: 'fornalhas', yLabel: 'itens/hora', yFmt: v => v >= 1000 ? fmt1(v / 1000).replace(',0', '') + ' mil' : fmtInt(v), tipFmt: v => fmtInt(v) + '/h',
     series: [
-      { name: '1 carrinho · 1 via', short: '1 via', color: '--s1', points: cont.a },
-      { name: '1 carrinho · 2 vias', short: '2 vias', color: '--s2', points: cont.b },
-      { name: '2 carrinhos · 4 vias', short: '4 vias', color: '--s3', points: cont.c },
+      { name: 'Carrinho por fileira, 1 fileira', short: '1 fileira', color: '--s1', points: cont.a },
+      { name: 'Carrinho por fileira, 2 fileiras', short: '2 fileiras', color: '--s2', points: cont.b },
+      { name: 'Extrator 8×, 4 módulos', short: 'extrator 8×', color: '--s3', points: cont.c },
       { name: 'se só a fornalha limitasse', short: 'limite', color: '--muted', dash: true, points: idealC },
     ],
   });
-  // respostas
   const g = (arr, N) => (arr.find(p => p[0] === N) || [0, 0])[1];
+  const pull = 20 / c.pullCd, load = 64 / pull;
   const t8 = g(one.a, 8), t16 = g(one.a, 16), t32 = g(one.a, 32), t64 = g(one.a, 64);
-  const knee = (arr) => { const mx = Math.max(...arr.map(p => p[1])); return (arr.find(p => p[1] >= 0.9 * mx) || arr[arr.length - 1])[0]; };
-  const kA = knee(cont.a), kB = knee(cont.b);
-  const maxA = Math.max(...cont.a.map(p => p[1])), maxC = Math.max(...cont.c.map(p => p[1]));
+  const b32 = g(one.c, 32), a2_32 = g(one.b, 32);
+  const c64b = g(cont.b, 64), c64c = g(cont.c, 64), c128c = g(cont.c, 128), c128b = g(cont.b, 128);
   $('answers').innerHTML = `
-    <div class="answer"><div class="eyebrow">1 pack por onda</div><div class="big">16–24 <small>fornalhas</small></div>
-      <p>De 8 para 16 o pack cai de <b>${fmtInt(t8)} s</b> para <b>${fmtInt(t16)} s</b>. De 32 para 64 cai só de <b>${fmtInt(t32)} s</b> para <b>${fmtInt(t64)} s</b>: o que sobra é carregar o carrinho (64 ÷ 2,5 = 25,6 s), uma passada e os ${cookS} s da última queima.</p></div>
-    <div class="answer"><div class="eyebrow">Fila grande</div><div class="big">${fmtInt(2.5 * cookS)} <small>fornalhas por via</small></div>
-      <p>Um funil entrega 2,5 itens/s e uma fornalha queima ${fmt1(1 / cookS)}/s, então uma via sustenta no máximo ${fmtInt(2.5 * cookS)} fornalhas. Com 1 via a vazão para em <b>~${fmtInt(maxA)}/h</b> a partir de ~${kA} fornalhas; com 2 vias o teto sobe e a curva só achata perto de ${kB}. Com 2 carrinhos e 4 vias, 64 fornalhas chegam a <b>~${fmtInt(maxC)}/h</b>.</p></div>
-    <div class="answer"><div class="eyebrow">Paralelizar o quê</div><div class="big">vias <small>antes de fornalhas</small></div>
-      <p>Mais fornalhas só ajudam enquanto a carga dá conta. Em ordem: <b>2 vias por carrinho</b> (de graça, é o baú duplo), depois <b>módulos até ~24 por carrinho</b>, depois <b>um 2º carrinho</b> com fileira própria. Carrinho-funil extra embaixo do mesmo baú não soma: cada metade de baú só tem 1 bloco embaixo.</p></div>`;
-  // tabela de combustível (32 fornalhas, 2 vias)
+    <div class="answer"><div class="eyebrow">1 pack por onda</div><div class="big">16–32 <small>fornalhas</small></div>
+      <p>Numa fileira, de 8 para 16 fornalhas o pack cai de <b>${fmtInt(t8)} s</b> para <b>${fmtInt(t16)} s</b>. De 32 para 64 cai só de <b>${fmtInt(t32)} s</b> para <b>${fmtInt(t64)} s</b>. O que sobra é carregar (64 ÷ ${fmt1(pull).replace(',0', '')} = ${fmt1(load)} s), uma passada do carrinho e os ${cookS} s da última queima.</p></div>
+    <div class="answer"><div class="eyebrow">O limite é por baú</div><div class="big">${fmt1(pull).replace(',0', '')} <small>itens/s por baú</small></div>
+      <p>É o que um carrinho-funil puxa de um baú. Dá para ${fmtInt(pull * cookS)} fornalhas, mas o carrinho só sai cheio ou com o baú vazio, então numa fila grande ele fica parado enchendo. Para ir além, ponha <b>mais baús</b>: 2 fileiras com 64 fornalhas fazem <b>~${fmtInt(c64b)}/h</b>; com 128, <b>~${fmtInt(c128b)}/h</b>.</p></div>
+    <div class="answer"><div class="eyebrow">Sua ideia: extrator 8×</div><div class="big">empata <small>na vazão</small></div>
+      <p>Os 2 carrinhos do extrator puxam os mesmos ${fmt1(2 * pull).replace(',0', '')} itens/s que 2 fileiras puxariam, só que divididos em 4 módulos de 5 itens/s. Com 64 fornalhas: <b>~${fmtInt(c64c)}/h</b> contra ~${fmtInt(c64b)}/h; com 128: <b>~${fmtInt(c128c)}/h</b>. 1 pack em 32 fornalhas: ${fmtInt(b32)} s contra ${fmtInt(a2_32)} s. O ganho real é travar módulo inteiro com 2 funis.</p></div>`;
+  // carvão: 32 fornalhas, modo automático
   let fr = '';
   for (let p = 1; p <= 4; p++) {
-    const a = Sim.runBatch({ ...base, mode: 'auto', tracks: 1, lanes: 2, mods: 4 }, p);
-    const f = Sim.runBatch({ ...base, mode: 'fixed', tracks: 1, lanes: 2, mods: 4 }, p);
-    fr += `<tr><td>${p}</td><td class="num">${fmtInt(a.sec)} s</td><td class="num">${a.coal}</td><td class="num">${fmtInt(f.sec)} s</td><td class="num">${f.coal}</td></tr>`;
+    const a = Sim.runBatch({ ...base, mode: 'auto', ...A1, mods: 4 }, p);
+    const b = Sim.runBatch({ ...base, mode: 'auto', ...B8, mods: 1 }, p);
+    const f = Sim.runBatch({ ...base, mode: 'fixed', ...B8, mods: 1 }, p);
+    fr += `<tr><td>${p}</td><td class="num">${fmtInt(a.sec)} s</td><td class="num">${a.coal}</td><td class="num">${fmtInt(b.sec)} s</td><td class="num">${b.coal}</td><td class="num">${fmtInt(f.sec)} s</td><td class="num">${f.coal}</td></tr>`;
   }
   $('fuelTable').innerHTML = fr;
-  // folga
-  const noGap = gapTest();
-  $('ckGap').textContent = noGap;
+  $('ckGap').textContent = gapTest(base);
+  // extrator: divisão de 1 pack entre os 2 módulos de um lado
+  const S = Sim.create({ ...base, ...B8, mods: 1 }); S.ev = []; Sim.addItems(S, 64, 'one');
+  const got = [0, 0, 0, 0];
+  while (S.t < 2400 && (S.sides[0].chest > 0 || S.sides[0].cart.items > 0 || S.sides[0].pads.some(p => p.n))) { S.ev.length = 0; Sim.tick(S); S.ev.forEach(e => { if (e.k === 'pad') got[e.p >> 1]++; }); }
+  $('x8Split').textContent = `${got[0]} e ${got[1]}`;
 }
-function gapTest() {
-  // compara a mesma onda com e sem folga de trilho (8 fornalhas): sem folga as pontas perdem passadas
-  const c = ui.cfg();
-  const r = Sim.runBatch({ layout: c.layout, mode: 'fixed', kind: c.kind, cartSpeed: c.cartSpeed, pullCd: c.pullCd, tracks: 1, lanes: 1, mods: 1 }, 1);
-  return `Com folga, 1 pack em 8 fornalhas leva ${fmtInt(r.sec)} s e cada uma recebe exatamente 8 itens. Sem folga, o funil das pontas é visitado duas vezes em menos de 0,8 s, perde uma passada por ainda estar ocupado e a divisão fica desigual (na simulação: 7, 7, 13, 13, 6, 6, 6, 6 e 161 s).`;
+function gapTest(base) {
+  // mesma onda (1 pack, 8 fornalhas) com e sem 4 trilhos de folga nas pontas
+  const cfg = { ...base, arch: 'row', tracks: 1, lanes: 1, mods: 1 };
+  const r = Sim.runBatch(cfg, 1), q = Sim.runBatch({ ...cfg, noGap: true }, 1);
+  return `Com folga, 1 pack em 8 fornalhas leva ${fmtInt(r.sec)} s e cada uma recebe exatamente 8 itens. Sem folga, o funil das pontas é visitado duas vezes em menos de 0,8 s, perde uma passada por ainda estar ocupado e a divisão fica desigual (7, 7, 13, 13, 6, 6, 6, 6): a mesma onda leva ${fmtInt(q.sec)} s.`;
 }
 function buildSSTable() {
   let h = '';
@@ -1319,9 +1517,9 @@ function buildLogic() {
 
 /* ===================== Ligações da interface ===================== */
 function bind() {
-  const structural = ['layout', 'tracks', 'mods', 'lanes', 'mode', 'kind'];
+  const structural = ['arch', 'layout', 'tracks', 'mods', 'lanes', 'mode', 'kind'];
   structural.forEach(n => document.querySelectorAll(`input[name="${n}"]`).forEach(el => el.addEventListener('change', () => {
-    newSim(n !== 'layout' && n !== 'tracks' && n !== 'mods');
+    newSim(!['arch', 'layout', 'tracks', 'mods'].includes(n));
     if (n === 'kind' || n === 'layout') scheduleAnalysis();
   })));
   document.querySelectorAll('input[name="speed"]').forEach(el => el.addEventListener('change', () => { state.speed = +radio('speed'); }));
@@ -1329,7 +1527,7 @@ function bind() {
   $('addCoal').addEventListener('click', () => { Sim.addFuel(state.S, 64); });
   $('pause').addEventListener('click', () => { state.paused = !state.paused; $('pause').textContent = state.paused ? 'Continuar' : 'Pausar'; });
   $('reset').addEventListener('click', () => newSim(true));
-  $('layer').addEventListener('input', () => { updateLayerName(); buildScene(false); });
+  $('layer').addEventListener('input', () => { state.layerAll = +$('layer').value >= +$('layer').max; updateLayerName(); buildScene(false); });
   $('terrain').addEventListener('change', () => buildScene(false));
   $('showLabels').addEventListener('change', () => { $('labels').hidden = !$('showLabels').checked; });
   ['cartSpeed', 'pullCd'].forEach(id => $(id).addEventListener('change', () => { newSim(true); scheduleAnalysis(); }));
