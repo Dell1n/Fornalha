@@ -454,7 +454,8 @@ const Sim = (() => {
         tr.f.push({ in: 0, fuel: 0, out: 0, burn: 0, cook: 0 });
         tr.hin.push({ n: 0, cd: 0 });
         tr.hfu.push({ n: 0, cd: 0 });
-        const g = Math.floor(i / 16), lo = g * 16, hi = Math.min(n, lo + 16) - 1;
+        const CH = cfg.chain || 16; // tamanho de cada corrente de funis de saída
+        const g = Math.floor(i / CH), lo = g * CH, hi = Math.min(n, lo + CH) - 1;
         const dir = g % 2 === 0 ? -1 : 1, end = dir < 0 ? lo : hi;
         tr.hout.push({ n: 0, cd: 0, g, next: i === end ? -1 : i + dir });
         if (!tr.sinks[g]) tr.sinks[g] = 0;
@@ -522,7 +523,7 @@ const Sim = (() => {
       const pullFrom = isInput ? (tr.lanes[0] && tr.lanes[0].pull ? tr.lanes[0] : null) : (fl.pull ? fl : null);
       if (pullFrom) {
         if (c.cd > 0) c.cd--;
-        else if (pullFrom.chest > 0 && c.items < CARTCAP) { pullFrom.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: isInput ? 'lane' : 'flane', tr: tr.id, l: 0 }); }
+        if (c.cd === 0 && pullFrom.chest > 0 && c.items < CARTCAP) { pullFrom.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: isInput ? 'lane' : 'flane', tr: tr.id, l: 0 }); }
       }
       if ((srcEmpty && c.items > 0) || c.items >= CARTCAP) depart(S, tr, c, isInput);
       return;
@@ -549,12 +550,12 @@ const Sim = (() => {
     tA.fed = sd.on >= 1; tB.fed = sd.on >= 2;
     const c = sd.cart;
     if (c.cd > 0) c.cd--;
-    else if (sd.chest > 0 && c.items < CARTCAP) { sd.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: 'ext', s: sd.id }); }
+    if (c.cd === 0 && sd.chest > 0 && c.items < CARTCAP) { sd.chest--; c.items++; c.cd = S.pullCd; emit(S, { k: 'ext', s: sd.id }); }
     // a ordem em que os funis atualizam muda a cada tick (média justa entre os 4)
     for (let k = 0; k < 4; k++) {
       const pi = (k + S.t) & 3, p = sd.pads[pi];
       if (padLocked(sd, pi)) continue;
-      if (p.cd > 0) { p.cd--; continue; }
+      if (p.cd > 0 && --p.cd > 0) continue;
       let mv = false;
       const lane = S.tracks[p.t].lanes[p.l];
       if (p.n > 0 && lane.n < HCAP) { const was = lane.n === 0; lane.n++; p.n--; mv = true; if (was && lane.cd === 0) lane.cd = HCD; emit(S, { k: 'pe', s: sd.id, p: pi }); }
@@ -570,7 +571,7 @@ const Sim = (() => {
     for (const tr of S.tracks) {
       tr.lanes.forEach((l, li) => {
         if (l.pull) return;
-        if (l.cd > 0) { l.cd--; return; }
+        if (l.cd > 0 && --l.cd > 0) return;
         let mv = false;
         if (l.n > 0 && atStation(tr.cart) && tr.cart.items < CARTCAP) { l.n--; tr.cart.items++; mv = true; emit(S, { k: 'lane', tr: tr.id, l: li }); }
         if (l.chest > 0 && l.n < HCAP) { l.chest--; l.n++; mv = true; }
@@ -579,7 +580,7 @@ const Sim = (() => {
       const fl = tr.fuelLane;
       if (!fl.pull) {
         if (fl.cd > 0) fl.cd--;
-        else {
+        if (fl.cd === 0) {
           let mv = false;
           if (fl.n > 0 && atStation(tr.fcart) && tr.fcart.items < CARTCAP) { fl.n--; tr.fcart.items++; mv = true; emit(S, { k: 'flane', tr: tr.id }); }
           if (fl.chest > 0 && fl.n < HCAP) { fl.chest--; fl.n++; mv = true; }
@@ -597,7 +598,7 @@ const Sim = (() => {
         if (!locked) {
           const h = tr.hin[i];
           if (h.cd > 0) h.cd--;
-          else {
+          if (h.cd === 0) {
             let mv = false;
             if (h.n > 0 && f.in < FCAP) { h.n--; f.in++; mv = true; emit(S, { k: 'hf', tr: tr.id, i }); }
             if (h.n < HCAP && under === i && tr.cart.items > 0) { tr.cart.items--; h.n++; mv = true; emit(S, { k: 'ch', tr: tr.id, i }); }
@@ -605,7 +606,7 @@ const Sim = (() => {
           }
           const hf = tr.hfu[i];
           if (hf.cd > 0) hf.cd--;
-          else {
+          if (hf.cd === 0) {
             let mv = false;
             if (hf.n > 0 && f.fuel < FCAP) { hf.n--; f.fuel++; mv = true; emit(S, { k: 'ff', tr: tr.id, i }); }
             if (hf.n < HCAP && funder === i && tr.fcart.items > 0) { tr.fcart.items--; hf.n++; mv = true; emit(S, { k: 'cf', tr: tr.id, i }); }
@@ -622,7 +623,7 @@ const Sim = (() => {
       }
       for (let i = 0; i < tr.n; i++) {
         const h = tr.hout[i];
-        if (h.cd > 0) { h.cd--; continue; }
+        if (h.cd > 0 && --h.cd > 0) continue;
         let mv = false;
         if (h.n > 0) {
           if (h.next < 0) { h.n--; tr.sinks[h.g]++; S.st.collected++; mv = true; emit(S, { k: 'sink', tr: tr.id, i, g: h.g }); }
@@ -1481,9 +1482,12 @@ function runAnalysis() {
 }
 function gapTest(base) {
   // mesma onda (1 pack, 8 fornalhas) com e sem 4 trilhos de folga nas pontas
-  const cfg = { ...base, arch: 'row', tracks: 1, lanes: 1, mods: 1 };
-  const r = Sim.runBatch(cfg, 1), q = Sim.runBatch({ ...cfg, noGap: true }, 1);
-  return `Com folga, 1 pack em 8 fornalhas leva ${fmtInt(r.sec)} s e cada uma recebe exatamente 8 itens. Sem folga, o funil das pontas é visitado duas vezes em menos de 0,8 s, perde uma passada por ainda estar ocupado e a divisão fica desigual (7, 7, 13, 13, 6, 6, 6, 6): a mesma onda leva ${fmtInt(q.sec)} s.`;
+  const cfg = { ...base, arch: 'row', tracks: 1, lanes: 1, mods: 1, mode: 'fixed' };
+  const r = Sim.runBatch(cfg, 1);
+  const S = Sim.create({ ...cfg, noGap: true }); S.ev = []; S.tracks[0].f.forEach(f => { f.fuel = 64; }); Sim.addItems(S, 64, 'stack');
+  const got = new Array(8).fill(0);
+  while (S.st.collected < S.st.added && S.t < 20 * 3000) { S.ev.length = 0; Sim.tick(S); S.ev.forEach(e => { if (e.k === 'ch') got[e.i]++; }); }
+  return `Com folga, 1 pack em 8 fornalhas leva ${fmtInt(r.sec)} s e cada uma recebe exatamente 8 itens. Sem folga, os funis perto das pontas são visitados duas vezes seguidas, perdem passadas por ainda estarem ocupados e a divisão fica desigual (${got.join(', ')}): a mesma onda leva ${fmtInt(S.t / 20)} s.`;
 }
 function buildSSTable() {
   let h = '';
